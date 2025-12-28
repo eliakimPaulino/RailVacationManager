@@ -18,4 +18,16 @@ class DateRange {
     final normalizedEnd = DateTime(end.day, end.month, end.year);
     return Result.success(DateRange._(normalizedStart, normalizedEnd));
   }
+
+  int get daysInclusive => end.difference(start).inDays + 1;
+
+  bool overlaps(DateRange other) {
+    return !(other.end.isBefore(start) || other.start.isAfter(end));
+  }
+
+  // @override
+  // String toString() {
+  //   final f = DateFormat('yyyy-MM-dd');
+  //   return '${f.format(start)} -> ${f.format(end)}';
+  // }
 }
