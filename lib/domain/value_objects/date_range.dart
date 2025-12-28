@@ -1,0 +1,21 @@
+import 'package:rail_vacation_manager/core/failures.dart';
+import 'package:rail_vacation_manager/core/result.dart';
+
+class DateRange {
+  final DateTime start;
+  final DateTime end;
+
+  const DateRange._(this.start, this.end);
+
+  static Result<DateRange, Failure> create(DateTime start, DateTime end) {
+    if (end.isBefore(start)) {
+      return Result.failure(
+        InvalidValueObject('End date must be after start date.'),
+      );
+    }
+    // normalize time to at-midnght if needed
+    final normalizedStart = DateTime(start.day, start.month, start.year);
+    final normalizedEnd = DateTime(end.day, end.month, end.year);
+    return Result.success(DateRange._(normalizedStart, normalizedEnd));
+  }
+}
