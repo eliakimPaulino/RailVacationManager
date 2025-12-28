@@ -6,7 +6,7 @@ class EmployeeId {
 
   const EmployeeId._(this.value);
 
-  static Result<EmployeeId, dynamic> create(String raw) {
+  static Result<EmployeeId, Failure> create(String raw) {
     final trimmed = raw.trim();
     if (trimmed.isEmpty) {
       return Result.failure(InvalidValueObject('EmployeeId cannot be empty'));
