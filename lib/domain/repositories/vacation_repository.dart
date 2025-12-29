@@ -9,3 +9,5 @@ abstract class VacationRepository {
   Future<Result<List<VacationRepository>, Failure>> getByEmployeeId(String employeeId);
   Future<Result<List<VacationRepository>, Failure>> getApprovedOverlappingRequests(DateRange period, String employeeId);
 }
+
+// overlapping: sobreposição. no contexto de férias, refere-se a períodos de férias que se cruzam ou coincidem em datas.
