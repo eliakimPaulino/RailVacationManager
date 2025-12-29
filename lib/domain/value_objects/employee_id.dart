@@ -6,12 +6,11 @@ class EmployeeId {
 
   const EmployeeId._(this.value);
 
-  static Result<EmployeeId, Failure> create(String raw) {
-    final trimmed = raw.trim();
-    if (trimmed.isEmpty) {
-      return Result.failure(InvalidValueObject('EmployeeId cannot be empty'));
+  static Result<EmployeeId, Failure> create(String id) {
+    if (!id.contains('-')) {
+      return Result.failure(InvalidValueObject('EmployeeId must contain a hyphen'));
     }
-    return Result.success(EmployeeId._(trimmed));
+    return Result.success(EmployeeId._(id));
   }
 
   @override
