@@ -22,8 +22,8 @@ class RequestVacationUseCase {
   }) async {
     // create VOs
     final employeeIdRes = EmployeeId.create(employeeIdRaw);
-    if (employeeIdRaw.isEmpty) {
-      return Result.failure(InvalidValueObject('EmployeeId cannot be empty'));
+    if (employeeIdRes.isFailure) {
+      return Result.failure(InvalidValueObject('Invalid Employee ID'));
     }
     final dateRangeRes = DateRange.create(start, end);
     if (dateRangeRes.isFailure) return Result.failure(dateRangeRes.error);
