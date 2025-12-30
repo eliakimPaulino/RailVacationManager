@@ -6,7 +6,7 @@ class Result<T, E> {
   const Result._(this._value, this._error,this._isSuccess);
 
   bool get isSuccess => _isSuccess;
-  bool get isFaiulure => !_isSuccess;
+  bool get isFailure => !_isSuccess;
 
   T get value {
     if (!isSuccess) {
