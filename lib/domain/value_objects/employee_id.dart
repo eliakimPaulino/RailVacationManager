@@ -8,10 +8,22 @@ class EmployeeId {
 
   static Result<EmployeeId, Failure> create(String id) {
     if (!id.contains('-')) {
-      return Result.failure(InvalidValueObject('EmployeeId must contain a hyphen'));
+      return Result.failure(
+        InvalidValueObject('EmployeeId must contain a hyphen'),
+      );
     }
     return Result.success(EmployeeId._(id));
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is EmployeeId &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
 
   @override
   String toString() => 'EmployeeId(value: $value)';

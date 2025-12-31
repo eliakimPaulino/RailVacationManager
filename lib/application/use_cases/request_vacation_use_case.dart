@@ -26,17 +26,23 @@ class RequestVacationUseCase {
       return Result.failure(InvalidValueObject('Invalid Employee ID'));
     }
     final dateRangeRes = DateRange.create(start, end);
-    if (dateRangeRes.isFailure) return Result.failure(dateRangeRes.error);
+    if (dateRangeRes.isFailure) {
+      return Result.failure(dateRangeRes.error);
+    }
 
     final employeeId = employeeIdRes.value;
+
     final period = dateRangeRes.value;
 
     final employeeRes = await employeeRepo.getById(employeeId);
-    if (employeeRes.isFailure) return Result.failure(employeeRes.error);
-    final employee = employeeRes.value;
+    if (employeeRes.isFailure) {
+      return Result.failure(employeeRes.error);
+    }
 
+    final employee = employeeRes.value;
     // business rule: sufficient days
     final days = period.daysInclusive;
+
     if (employee.vacationDaysBalance < days) {
       return Result.failure(
         InsufficientVacationDays(
@@ -58,16 +64,28 @@ class RequestVacationUseCase {
         ),
       );
     }
-    
-    // create request 
-    final managerId = managerIdRaw != null ? (EmployeeId.create(managerIdRaw).value) : null;
-    final vacationRes = VacationRequest.create(id: requestId, employeeId: employeeId, managerId: managerId, period: period);
+
+    // create request
+    final managerId = managerIdRaw != null
+        ? (EmployeeId.create(managerIdRaw).value)
+        : null;
+
+    final vacationRes = VacationRequest.create(
+      id: requestId,
+      employeeId: employeeId,
+      managerId: managerId,
+      period: period,
+    );
+
     if (vacationRes.isFailure) return Result.failure(vacationRes.error);
     final vacationResponse = vacationRes.value;
 
     // move to requested status
     final requestRes = vacationResponse.request();
     if (requestRes.isFailure) return Result.failure(requestRes.error);
+
+    //business rule: deduct vaction days
+    employee.consumeDays(days);
 
     final saveRes = await vacationRepo.save(vacationResponse);
     if (saveRes.isFailure) return Result.failure(saveRes.error);

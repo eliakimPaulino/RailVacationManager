@@ -14,8 +14,8 @@ class DateRange {
       );
     }
     // normalize time to at-midnght if needed
-    final normalizedStart = DateTime(start.day, start.month, start.year);
-    final normalizedEnd = DateTime(end.day, end.month, end.year);
+    final normalizedStart = DateTime(start.year, start.month, start.day);
+    final normalizedEnd = DateTime(end.year, end.month, end.day);
     return Result.success(DateRange._(normalizedStart, normalizedEnd));
   }
 
