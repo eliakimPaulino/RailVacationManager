@@ -25,13 +25,13 @@ class RequestVacationUseCase {
     if (employeeIdRes.isFailure) {
       return Result.failure(InvalidValueObject('Invalid Employee ID'));
     }
+
     final dateRangeRes = DateRange.create(start, end);
     if (dateRangeRes.isFailure) {
       return Result.failure(dateRangeRes.error);
     }
 
     final employeeId = employeeIdRes.value;
-
     final period = dateRangeRes.value;
 
     final employeeRes = await employeeRepo.getById(employeeId);
