@@ -8,14 +8,15 @@ class DateRange {
   const DateRange._(this.start, this.end);
 
   static Result<DateRange, Failure> create(DateTime start, DateTime end) {
-    if (end.isBefore(start)) {
+
+    final normalizedStart = DateTime(start.year, start.month, start.day);
+    final normalizedEnd = DateTime(end.year, end.month, end.day);
+
+    if ( normalizedEnd.isBefore(normalizedStart)) {
       return Result.failure(
         InvalidValueObject('End date must be after start date.'),
       );
     }
-
-    final normalizedStart = DateTime(start.year, start.month, start.day);
-    final normalizedEnd = DateTime(end.year, end.month, end.day);
 
     return Result.success(DateRange._(normalizedStart, normalizedEnd));
   }
