@@ -14,14 +14,14 @@ class InMemoryVacationRepository implements VacationRepository {
     DateRange period,
     String employeeId,
   ) async {
-    final list = _store.values
-        .where(
+    final list = _store.values.where(
           (r) =>
+
               r.employeeId.value == employeeId &&
               r.status == VacationStatus.Approved &&
               r.period.overlaps(period),
-        )
-        .toList();
+
+        ).toList();
     return Result.success(list);
   }
 
