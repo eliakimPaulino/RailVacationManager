@@ -12,7 +12,7 @@ Employee createTestEmployee({required String name, required int balance}) {
   final idRes = idGenerator.generate();
   if (idRes.isFailure) throw Exception('Failed to generate EmployeeId for test');
 
-  // Agora criamos o employee com o ID gerado
+  // o employee com o ID gerado
   final empId = idRes.value;
   return Employee.create(empId, name, balance).value;
 }
