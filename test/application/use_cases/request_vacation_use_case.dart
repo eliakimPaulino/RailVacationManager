@@ -19,13 +19,13 @@ void main() {
 
   test('should create vacation request when balance is sufficient', () async {
     // Arrange
-    final employee = createTestEmployee(id: 'emp-1', name: 'Alice', balance: 15);
+    final employee = createTestEmployee(name: 'Eliakim', balance: 15);
     await employeeRepo.save(employee);
 
     // Act
     final result = await useCase.execute(
       requestId: '3f1a9c2e-7b44-4c6f-9f8a-2d7a1b5c6e90',
-      employeeIdRaw: 'emp-1',
+      employeeIdRaw: employee.id.value,
       start: DateTime(2024, 7, 1),
       end: DateTime(2024, 7, 5),
       managerIdRaw: 'mgr-1'

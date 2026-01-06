@@ -14,9 +14,8 @@ class UuidEmployeeIdGenerator implements EmployeeIdGenerator{
 
   @override
   Result<EmployeeId, Failure> generate() {
-    // final timeStamp = _clock.now().toIso8601String();
-    // final id = '${_uuid.v4()}-$timeStamp';
-    final id = _uuid.v4();
+    final timeStamp = _clock.now().toIso8601String();
+    final id = '${_uuid.v4()}-$timeStamp';
     return EmployeeId.create(id);
   }
 }
