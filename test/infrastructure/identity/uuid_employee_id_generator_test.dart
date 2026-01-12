@@ -20,13 +20,20 @@ class FakeClock extends Clock {
 
   @override
   DateTime now() => fixed;
+
+  @override
+  String toString() {
+    return 'DateTime ${fixed.day}/${fixed.month}/${fixed.year}';
+  }
 }
 
 void main () {
   test('happy path: should generate id mixing uuid and timestamp', () {
     // arrange
     final fakeUuid = FakeUuid('123e4567-e89b-12d3-a456-426614174000');
+    print(fakeUuid.value);
     final fakeClock = FakeClock(DateTime(2025, 1, 1, 12, 0, 0));
+    print(fakeClock);
 
     final generator = UuidEmployeeIdGenerator(fakeUuid, fakeClock);
     
