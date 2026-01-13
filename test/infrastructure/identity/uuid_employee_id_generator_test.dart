@@ -35,7 +35,7 @@ void main () {
     final fakeClock = FakeClock(DateTime(2025, 1, 1, 12, 0, 0));
     print(fakeClock);
 
-    final generator = UuidEmployeeIdGenerator(fakeUuid, fakeClock);
+    final generator = UuidEmployeeIdGenerator();
     
     // act
     final result = generator.generate();

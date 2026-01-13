@@ -1,5 +1,5 @@
-import 'package:rail_vacation_manager/core/failures.dart';
 import 'package:test/test.dart';
+import 'package:rail_vacation_manager/core/failures.dart';
 import 'package:rail_vacation_manager/domain/entities/employee.dart';
 import 'package:rail_vacation_manager/domain/value_objects/employee_id.dart';
 
