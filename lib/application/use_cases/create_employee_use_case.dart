@@ -16,12 +16,12 @@ class CreateEmployeeUseCase {
 
   Future<Result<Employee, Failure>> execute({
     required String name,
-    required int initialBalance,
+    required DateTime hireDate,
   }) async {
     final idRes = idGenerator.generate();
     if (idRes.isFailure) return Result.failure(idRes.error);
 
-    final employee = Employee.create(idRes.value, name, initialBalance);
+    final employee = Employee.create(id: idRes.value, name: name, hireDate: hireDate);
     if (employee.isFailure) return Result.failure(employee.error);
 
     final saveRes = await employeeRepository.save(employee.value);

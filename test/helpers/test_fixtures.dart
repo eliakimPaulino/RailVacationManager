@@ -6,7 +6,7 @@ import 'package:rail_vacation_manager/infrastructure/identity/uuid_employee_id_g
 import 'package:rail_vacation_manager/infrastructure/time/system_clock.dart';
 import 'package:uuid/uuid.dart';
 
-Employee createTestEmployee({required String name, required int balance}) {
+Employee createTestEmployee({required String name, required DateTime hireDate}) {
   final idGenerator = UuidEmployeeIdGenerator(Uuid(), SystemClock());
 
   final idRes = idGenerator.generate();
@@ -14,7 +14,8 @@ Employee createTestEmployee({required String name, required int balance}) {
 
   // o employee com o ID gerado
   final empId = idRes.value;
-  return Employee.create(empId, name, balance).value;
+  // return Employee.create(empId, name, balance).value;
+  return Employee.create(id: empId, name: name, hireDate: hireDate).value;
 }
 
 VacationRequest createTestApprovedVacationRequest({

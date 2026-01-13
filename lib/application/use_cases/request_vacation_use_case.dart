@@ -39,18 +39,6 @@ class RequestVacationUseCase {
       return Result.failure(employeeRes.error);
     }
 
-    final employee = employeeRes.value;
-    // business rule: sufficient days
-    final days = period.daysInclusive;
-
-    if (employee.vacationDaysBalance < days) {
-      return Result.failure(
-        InsufficientVacationDays(
-          'Employee has only ${employee.vacationDaysBalance} vacation days, but requested $days days',
-        ),
-      );
-    }
-
     // check overlapping approved vacations
     final overlapRes = await vacationRepo.getApprovedOverlappingRequests(
       period,
@@ -83,9 +71,6 @@ class RequestVacationUseCase {
     // move to requested status
     final requestRes = vacationResponse.request();
     if (requestRes.isFailure) return Result.failure(requestRes.error);
-
-    //business rule: deduct vaction days
-    employee.consumeDays(days);
 
     final saveRes = await vacationRepo.save(vacationResponse);
     if (saveRes.isFailure) return Result.failure(saveRes.error);
