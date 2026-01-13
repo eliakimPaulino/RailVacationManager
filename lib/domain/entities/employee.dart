@@ -35,5 +35,5 @@ class Employee {
 
   @override
   String toString() => 'Employee(id: $id, name: $name, vacationDaysBalance: $_vacationDaysBalance)';
-  
+
 }
