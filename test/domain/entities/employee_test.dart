@@ -39,7 +39,7 @@ void main() {
 
       final result = Employee.create(
         id: id,
-        name: '',
+        name: 'Eliakim',
         hireDate: hireDate,
         terminationDate: terminationDate,
       );
