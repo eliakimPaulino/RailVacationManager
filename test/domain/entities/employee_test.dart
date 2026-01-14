@@ -60,7 +60,7 @@ void main() {
       expect(employee.isActive, true);
     });
 
-    test('shuld not be active when termination date is in the past', () {
+    test('should not be active when termination date is in the past', () {
       final employee = Employee.create(
         id: EmployeeId.create('EMP-1').value,
         name: 'Eliakim',
