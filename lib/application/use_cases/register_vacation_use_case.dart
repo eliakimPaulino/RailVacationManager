@@ -14,11 +14,15 @@ class RegisterVacationUseCase {
   Future<Result<VacationRequest, Failure>> execute({
     required String requestId,
   }) async {
-    final vrRes = await vacationRepo.getById(requestId);
-    if (vrRes.isFailure) return Result.failure(vrRes.error);
-    final vr = vrRes.value;
 
+    final vrRes = await vacationRepo.getById(requestId);
+
+    if (vrRes.isFailure) return Result.failure(vrRes.error);
+
+    final vr = vrRes.value;
+    
     final empRes = await employeeRepo.getById(vr.employeeId);
+
     if (empRes.isFailure) return Result.failure(empRes.error);
 
     // ensure Approved

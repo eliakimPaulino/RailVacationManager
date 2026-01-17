@@ -41,6 +41,10 @@ class Employee {
     );
   }
 
+  factory Employee.fake() {
+    return Employee._(id: EmployeeId.create('Fake').value, name: 'FakeName', hireDate: DateTime.now());
+  }
+
   bool get isActive =>
       terminationDate == null || terminationDate!.isAfter(DateTime.now());
 

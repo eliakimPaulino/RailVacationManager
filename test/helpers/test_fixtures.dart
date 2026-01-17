@@ -1,3 +1,4 @@
+import 'package:rail_vacation_manager/application/use_cases/register_vacation_use_case.dart';
 import 'package:rail_vacation_manager/domain/entities/employee.dart';
 import 'package:rail_vacation_manager/domain/entities/vacation_request.dart';
 import 'package:rail_vacation_manager/domain/value_objects/date_range.dart';
@@ -11,7 +12,7 @@ Employee createTestEmployee({required String name, required DateTime hireDate}) 
   if (idRes.isFailure) throw Exception('Failed to generate EmployeeId for test');
 
   final empId = idRes.value;
-  
+
   return Employee.create(id: empId, name: name, hireDate: hireDate).value;
 }
 

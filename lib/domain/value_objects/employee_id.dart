@@ -15,6 +15,10 @@ class EmployeeId {
     return Result.success(EmployeeId._(id));
   }
 
+  factory EmployeeId.fake(String value) {
+    return EmployeeId._(value);
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

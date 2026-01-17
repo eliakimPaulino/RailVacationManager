@@ -1,5 +1,6 @@
 import 'package:rail_vacation_manager/core/vacation_status.dart';
 import 'package:rail_vacation_manager/domain/value_objects/employee_id.dart';
+import 'package:meta/meta.dart';
 
 import '../../core/failures.dart';
 import '../../core/result.dart';
@@ -42,6 +43,24 @@ class VacationRequest {
         VacationStatus.Draft,
         null,
       ),
+    );
+  }
+
+  @visibleForTesting
+  static VacationRequest fake({
+    required String id,
+    required EmployeeId employeeId,
+    required EmployeeId managerId,
+    required VacationStatus status,
+    String? approverNote,
+  }) {
+    return VacationRequest._(
+      id,
+      employeeId,
+      managerId,
+      DateRange.create(DateTime(2025, 1, 1), DateTime(2025, 1, 29)).value,
+      status,
+      approverNote,
     );
   }
 
