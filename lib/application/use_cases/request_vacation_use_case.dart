@@ -18,7 +18,7 @@ class VacationRequestUseCase {
     required String employeeIdRaw,
     required DateTime start,
     required DateTime end,
-    String? managerIdRaw,
+    required String managerIdRaw,
   }) async {
     // create VOs
     final employeeIdRes = EmployeeId.create(employeeIdRaw);
@@ -54,9 +54,8 @@ class VacationRequestUseCase {
     }
 
     // create request
-    final managerId = managerIdRaw != null
-        ? (EmployeeId.create(managerIdRaw).value)
-        : null;
+    final managerId = (EmployeeId.create(managerIdRaw).value);
+       
 
     final vacationRes = VacationRequest.create(
       id: requestId,

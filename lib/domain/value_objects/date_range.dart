@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:rail_vacation_manager/core/failures.dart';
 import 'package:rail_vacation_manager/core/result.dart';
 
@@ -22,6 +23,9 @@ class DateRange {
   }
 
   int get daysInclusive => end.difference(start).inDays + 1;
+
+  @visibleForTesting
+  static DateRange fakeRange() => DateRange._(DateTime(2021, 08, 03), DateTime(2022, 12, 18));
 
   bool overlaps(DateRange other) {
     return !(other.end.isBefore(start) || other.start.isAfter(end));

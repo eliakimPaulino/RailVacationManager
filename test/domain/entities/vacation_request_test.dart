@@ -1,32 +1,26 @@
+import 'package:rail_vacation_manager/core/failures.dart';
 import 'package:rail_vacation_manager/core/vacation_status.dart';
 import 'package:rail_vacation_manager/domain/entities/vacation_request.dart';
 import 'package:rail_vacation_manager/domain/value_objects/date_range.dart';
 import 'package:rail_vacation_manager/domain/value_objects/employee_id.dart';
 import 'package:test/test.dart';
 
-class HelperTest {
-  EmployeeId employee() => EmployeeId.create(
-    'EMP-1',
-  ).fold((id) => id, (error) => throw StateError('Invalid EmployeeId: $error'));
-  EmployeeId manager() => EmployeeId.create(
-    'MGR-1',
-  ).fold((id) => id, (error) => throw StateError('Invalid ManagerId: $error'));
-
-  DateRange validPeriod() =>
-      DateRange.create(DateTime(2025, 1, 1), DateTime(2025, 1, 10)).fold(
-        (range) => range,
-        (error) => throw StateError('Invalid DateRange: $error'),
-      );
-}
 void main() {
-  final helper = HelperTest();
+  late EmployeeId empId;
+  late EmployeeId mgrId;
+  late DateRange period;
 
+  setUp(() {
+    empId = EmployeeId.fakeEmp();
+    mgrId = EmployeeId.fakeMgr();
+    period = DateRange.fakeRange();
+  });
   test('create VacationRequest from draft status', () {
     final result = VacationRequest.create(
       id: 'VR-1',
-      employeeId: helper.employee(),
-      managerId: helper.manager(),
-      period: helper.validPeriod(),
+      employeeId: empId,
+      managerId: mgrId,
+      period: period,
     );
 
     expect(result.isSuccess, true);
@@ -42,22 +36,123 @@ void main() {
     expect(invalidPeriod.isFailure, true);
   });
 
+  test('approve: should not approve if status is different from Draft', () {
+    final vr = VacationRequest.fake(
+      id: 'vreq-1',
+      employeeId: empId,
+      managerId: mgrId,
+      status: VacationStatus.Rejected,
+      approverNote: 'Your requisition was rejected!',
+    );
+
+    final result = vr.approve(mgrId);
+
+    expect(result.isSuccess, false);
+    expect(vr.id, 'vreq-1');
+    expect(vr.employeeId, empId);
+    expect(vr.managerId, mgrId);
+    expect(vr.status, VacationStatus.Rejected);
+    expect(vr.approverNote, 'Your requisition was rejected!');
+  });
+
+  test(
+    'approve: should not approve if manager id is not the assigned manager',
+    () {
+      final vr = VacationRequest.fake(
+        id: 'vreq-1',
+        employeeId: empId,
+        managerId: mgrId,
+        status: VacationStatus.Requested,
+        approverNote: 'Your requisition was rejected!',
+      );
+
+      print(vr.managerId);
+
+      final result = vr.approve(EmployeeId.fakeEmp());
+
+      result.fold(
+        (success) => print('Approved manager'),
+        (failure) => print('Manager Id not approved!\n$failure'),
+      );
+
+      expect(result.isSuccess, false);
+      expect(vr.id, 'vreq-1');
+      expect(vr.employeeId, empId);
+      expect(vr.managerId, mgrId);
+      expect(vr.status, VacationStatus.Requested);
+      expect(vr.approverNote, 'Your requisition was rejected!');
+    },
+  );
+
+  test('reject: should not reject if status is different from requested', () {
+    final vr = VacationRequest.fake(
+      id: 'vreq-1',
+      employeeId: empId,
+      managerId: mgrId,
+      status: VacationStatus.Approved,
+      approverNote: 'Not rejected!',
+    );
+
+    final result = vr.reject(mgrId);
+
+    result.fold(
+      (success) => print('Rejected request vacation'),
+      (failure) =>
+          print('Can not Reject. Status is already Approved.\n$failure'),
+    );
+
+    expect(result.isSuccess, false);
+    expect(vr.id, 'vreq-1');
+    expect(vr.employeeId, empId);
+    expect(vr.managerId, mgrId);
+    expect(vr.status, VacationStatus.Approved);
+    expect(vr.approverNote, 'Not rejected!');
+  });
+
+  test(
+    'reject: should reject if manager id is not the assigned manager',
+    () {
+      final vr = VacationRequest.fake(
+        id: 'vreq-1',
+        employeeId: empId,
+        managerId: mgrId,
+        status: VacationStatus.Requested,
+        approverNote: 'Your requisition was rejected!',
+      );
+
+      final result = vr.reject(EmployeeId.fakeEmp());
+
+      result.fold(
+        (success) => print('Approved manager'),
+        (failure) => print('Manager Id not approved!\n$failure'),
+      );
+
+    expect(result.isSuccess, false);
+    expect(vr.id, 'vreq-1');
+    expect(vr.employeeId, empId);
+    expect(vr.managerId, mgrId);
+    expect(vr.status, VacationStatus.Requested);
+    expect(vr.approverNote, 'Your requisition was rejected!');
+    },
+  );
+
   test('happy path: request, approve, register', () {
+    var managerId = EmployeeId.fakeMgr();
+
     final vr = VacationRequest.create(
-      id: 'VR-1',
-      employeeId: helper.employee(),
-      period: helper.validPeriod(),
-      managerId: helper.manager()
+      id: 'vreq-1',
+      employeeId: EmployeeId.fakeEmp(),
+      managerId: EmployeeId.fakeMgr(),
+      period: DateRange.fakeRange(),
     ).value;
 
     expect(vr.request().isSuccess, true);
     expect(vr.status, VacationStatus.Requested);
 
-    expect(vr.approve(helper.manager()).isSuccess, true);
+    expect(vr.approve(managerId).isSuccess, true);
     expect(vr.status, VacationStatus.Approved);
 
     expect(vr.register().isSuccess, true);
     expect(vr.status, VacationStatus.Registered);
-
   });
 }

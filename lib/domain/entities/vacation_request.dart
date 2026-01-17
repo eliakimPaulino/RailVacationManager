@@ -9,7 +9,7 @@ import '../value_objects/date_range.dart';
 class VacationRequest {
   final String id;
   final EmployeeId employeeId;
-  final EmployeeId? managerId;
+  final EmployeeId managerId;
   final DateRange period;
   VacationStatus _status;
   String? approverNote;
@@ -26,7 +26,7 @@ class VacationRequest {
   static Result<VacationRequest, Failure> create({
     required String id,
     required EmployeeId employeeId,
-    EmployeeId? managerId,
+    required EmployeeId managerId,
     required DateRange period,
   }) {
     if (period.daysInclusive <= 0) {
@@ -68,7 +68,7 @@ class VacationRequest {
 
   Result<void, Failure> request() {
     if (_status != VacationStatus.Draft) {
-      return Result.failure(InvalidValueObject('Can only request from Draft'));
+      return Result.failure(InvalidVacationStatus('Can only request from Draft'));
     }
     _status = VacationStatus.Requested;
     return Result.success(null);
@@ -77,13 +77,13 @@ class VacationRequest {
   Result<void, Failure> approve(EmployeeId approver, {String? note}) {
     if (_status != VacationStatus.Requested) {
       return Result.failure(
-        InvalidValueObject('Can only approve from Requested'),
+        InvalidVacationStatus('Can only approve from Requested'),
       );
     }
-    if (managerId != null && managerId!.value != approver.value) {
+    if (managerId.value != approver.value) {
       return Result.failure(
-        InvalidValueObject(
-          'Only the assigned manager can approve this request',
+        UnauthorizedApprover(
+          'Only the assigned manager can approve this request.\nExpected Manager: ${managerId.value}\nActual Manager: ${approver.value}',
         ),
       );
     }
@@ -95,12 +95,12 @@ class VacationRequest {
   Result<void, Failure> reject(EmployeeId approver, {String? note}) {
     if (_status != VacationStatus.Requested) {
       return Result.failure(
-        InvalidValueObject('Can only reject from Requested'),
+        InvalidVacationStatus('Can only reject from Requested'),
       );
     }
-    if (managerId != null && managerId!.value != approver.value) {
+    if ( managerId.value != approver.value) {
       return Result.failure(
-        InvalidValueObject('Only the assigned manager can reject this request'),
+        UnauthorizedApprover('Only the assigned manager can reject this request.\nExpected Manager: ${managerId.value}\nActual Manager: ${approver.value}'),
       );
     }
     _status = VacationStatus.Rejected;
@@ -111,7 +111,7 @@ class VacationRequest {
   Result<void, Failure> register() {
     if (_status != VacationStatus.Approved) {
       return Result.failure(
-        InvalidValueObject('Can only register from Approved'),
+        InvalidVacationStatus('Can only register from Approved'),
       );
     }
     _status = VacationStatus.Registered;
@@ -122,5 +122,5 @@ class VacationRequest {
 
   @override
   String toString() =>
-      'VacationRequest(id: $id, employeeId: $employeeId, managerId: $managerId, period: ${period.start} • ${period.end}, status: $_status, approverNote: $approverNote)';
+      'Vacation Request\nID: $id\nEmployee Id: ${employeeId.value}\nManager Id: ${managerId.value}\nPeriod: ${period.start} > ${period.end}\nStatus: $_status\nApproverNote: $approverNote';
 }

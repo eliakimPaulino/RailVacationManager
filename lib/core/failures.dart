@@ -7,10 +7,6 @@ abstract class Failure {
   String toString() => '$runtimeType: $message';
 }
 
-class InsufficientVacationDays extends Failure {
-  InsufficientVacationDays(super.message);
-}
-
 class OverlappingVacation extends Failure {
   OverlappingVacation(super.message);
 }
@@ -25,4 +21,8 @@ class NotFoundFailure extends Failure {
 
 class InvalidValueObject extends Failure {
   InvalidValueObject(super.message);
+}
+
+class InvalidVacationStatus extends Failure {
+  InvalidVacationStatus(super.message);
 }

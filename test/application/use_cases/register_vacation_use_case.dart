@@ -6,7 +6,6 @@ import 'package:rail_vacation_manager/core/vacation_status.dart';
 import 'package:rail_vacation_manager/domain/entities/employee.dart';
 import 'package:rail_vacation_manager/domain/entities/vacation_request.dart';
 import 'package:rail_vacation_manager/domain/value_objects/employee_id.dart';
-import 'package:rail_vacation_manager/infrastructure/identity/uuid_employee_id_generator.dart';
 import 'package:rail_vacation_manager/infrastructure/repositories/in_memory_employee_repository.dart';
 import 'package:rail_vacation_manager/infrastructure/repositories/in_memory_vacation_repository.dart';
 import 'package:test/test.dart';
@@ -18,8 +17,8 @@ class MockEmployeeRepository extends Mock implements InMemoryEmployeeRepository 
 class FakeVacationRequest {
   static VacationRequest approved() => VacationRequest.fake(
     id: '',
-    employeeId: EmployeeId.fake(UuidEmployeeIdGenerator().toString()),
-    managerId: EmployeeId.fake(UuidEmployeeIdGenerator().toString()),
+    employeeId: EmployeeId.fakeEmp(),
+    managerId: EmployeeId.fakeMgr(),
     status: VacationStatus.Approved,
   );
 
