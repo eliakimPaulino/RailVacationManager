@@ -7,11 +7,11 @@ import 'package:rail_vacation_manager/domain/value_objects/employee_id.dart';
 import '../../domain/entities/vacation_request.dart';
 import '../../domain/repositories/vacation_repository.dart';
 
-class RequestVacationUseCase {
+class VacationRequestUseCase {
   final EmployeeRepository employeeRepo;
   final VacationRepository vacationRepo;
 
-  RequestVacationUseCase(this.employeeRepo, this.vacationRepo);
+  VacationRequestUseCase(this.employeeRepo, this.vacationRepo);
 
   Future<Result<VacationRequest, Failure>> execute({
     required String requestId,

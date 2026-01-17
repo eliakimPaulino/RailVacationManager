@@ -122,5 +122,5 @@ class VacationRequest {
 
   @override
   String toString() =>
-      'VacationRequest(id: $id, employeeId: $employeeId, managerId: $managerId, period: $period, status: $_status, approverNote: $approverNote)';
+      'VacationRequest(id: $id, employeeId: $employeeId, managerId: $managerId, period: ${period.start} • ${period.end}, status: $_status, approverNote: $approverNote)';
 }

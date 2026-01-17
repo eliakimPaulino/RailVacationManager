@@ -11,26 +11,24 @@ import 'package:rail_vacation_manager/infrastructure/repositories/in_memory_empl
 import 'package:rail_vacation_manager/infrastructure/repositories/in_memory_vacation_repository.dart';
 import 'package:test/test.dart';
 
-class MockVacationRepository extends Mock
-    implements InMemoryVacationRepository {}
+class MockVacationRepository extends Mock implements InMemoryVacationRepository {}
 
-class MockEmployeeRepository extends Mock
-    implements InMemoryEmployeeRepository {}
+class MockEmployeeRepository extends Mock implements InMemoryEmployeeRepository {}
 
 class FakeVacationRequest {
   static VacationRequest approved() => VacationRequest.fake(
-    id: 'Test-FakeVacationRequest.approved()',
+    id: '',
     employeeId: EmployeeId.fake(UuidEmployeeIdGenerator().toString()),
     managerId: EmployeeId.fake(UuidEmployeeIdGenerator().toString()),
     status: VacationStatus.Approved,
   );
 
   static VacationRequest requested() => VacationRequest.fake(
-    id: 'Test-FakeVacationRequest.requested()',
-    employeeId: EmployeeId.create(UuidEmployeeIdGenerator().toString()).value,
-    managerId: EmployeeId.fake(UuidEmployeeIdGenerator().toString()),
+    id: 'req-1',
+    employeeId: EmployeeId.fakeEmp(),
+    managerId: EmployeeId.fakeMgr(),
     status: VacationStatus.Requested,
-    approverNote: 'Good fake vacation!',
+    approverNote: 'Good vacation!',
   );
 }
 
@@ -63,10 +61,6 @@ void main() {
   test('should fail when employee is not found', () async {
     final vacation = FakeVacationRequest.approved();
 
-    print(
-      '${vacation.id}\n${vacation.employeeId}\n${vacation.managerId}\n${vacation.period}\n',
-    );
-
     when(
       () => vacationRepo.getById('vac-1'),
     ).thenAnswer((_) async => Result.success(vacation));
@@ -79,5 +73,16 @@ void main() {
 
     expect(result.isFailure, true);
     expect(result.error, isA<NotFoundFailure>());
+  });
+
+  test('should fail when vacation is not approved', () async {
+    final vacation = FakeVacationRequest.requested();
+
+    when(() => vacationRepo.getById('req-1')).thenAnswer((_) async => Result.success(vacation));
+    when(() => employeeRepo.getById(vacation.employeeId)).thenAnswer((_) async => Result.success(FakeEmployee.any()));
+
+    final result = await useCase.execute(requestId: 'req-1');
+
+    expect(result.isFailure, true);
   });
 }

@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import '../../core/failures.dart';
 import '../../core/result.dart';
 import '../value_objects/employee_id.dart';
@@ -41,8 +43,9 @@ class Employee {
     );
   }
 
+  @visibleForTesting
   factory Employee.fake() {
-    return Employee._(id: EmployeeId.create('Fake').value, name: 'FakeName', hireDate: DateTime.now());
+    return Employee._(id: EmployeeId.create('0123f4k3-4f67-8a00-1k3e-56789f4k3001').value, name: 'FakeName', hireDate: DateTime.now());
   }
 
   bool get isActive =>
@@ -50,5 +53,5 @@ class Employee {
 
   @override
   String toString() =>
-      'Employee(id: ${id.value}, name: $name, hireDate: $hireDate, terminationDate: $terminationDate)';
+      'Employee Data\nID: ${id.value}\nName: $name\nHireDate: $hireDate\nTerminationDate: $terminationDate';
 }

@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:rail_vacation_manager/core/failures.dart';
 import 'package:rail_vacation_manager/core/result.dart';
 
@@ -18,6 +19,12 @@ class EmployeeId {
   factory EmployeeId.fake(String value) {
     return EmployeeId._(value);
   }
+
+  @visibleForTesting
+  factory EmployeeId.fakeEmp() => EmployeeId._('0f4k3123-4f67-8a00-1k3e-56789f4k3001');
+
+  @visibleForTesting
+  factory EmployeeId.fakeMgr() => EmployeeId._('0f4k3123-m467-n400-g3r3e-56789f4k3010');
 
   @override
   bool operator ==(Object other) =>

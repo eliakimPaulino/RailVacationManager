@@ -1,5 +1,6 @@
 import 'package:rail_vacation_manager/application/use_cases/approve_vacation_use_case.dart';
 import 'package:rail_vacation_manager/core/vacation_status.dart';
+import 'package:rail_vacation_manager/domain/value_objects/employee_id.dart';
 import 'package:rail_vacation_manager/infrastructure/repositories/in_memory_employee_repository.dart';
 import 'package:rail_vacation_manager/infrastructure/repositories/in_memory_vacation_repository.dart';
 import 'package:test/test.dart';
@@ -20,7 +21,6 @@ void main() {
   test('should approve a request vacation', () async {
     final vr = createTestApprovedVacationRequest(
       requestId: 'req-1',
-      employeeId: 'emp-1',
       start: DateTime(2026, 01, 06),
       end: DateTime(2026, 01, 25),
     );
@@ -31,7 +31,7 @@ void main() {
 
     final result = await useCase.execute(
       requestId: 'req-1',
-      approverIdRaw: 'emp-1',
+      approverIdRaw: EmployeeId.fakeMgr().value,
     );
 
     expect(result.isSuccess, true);
