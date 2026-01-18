@@ -1,4 +1,3 @@
-import 'package:rail_vacation_manager/core/failures.dart';
 import 'package:rail_vacation_manager/core/vacation_status.dart';
 import 'package:rail_vacation_manager/domain/entities/vacation_request.dart';
 import 'package:rail_vacation_manager/domain/value_objects/date_range.dart';
