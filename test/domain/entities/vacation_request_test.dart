@@ -8,6 +8,7 @@ void main() {
   late EmployeeId empId;
   late EmployeeId mgrId;
   late DateRange period;
+  
 
   setUp(() {
     empId = EmployeeId.fakeEmp();
@@ -136,19 +137,18 @@ void main() {
   );
 
   test('happy path: request, approve, register', () {
-    var managerId = EmployeeId.fakeMgr();
 
     final vr = VacationRequest.create(
       id: 'vreq-1',
-      employeeId: EmployeeId.fakeEmp(),
-      managerId: EmployeeId.fakeMgr(),
-      period: DateRange.fakeRange(),
+      employeeId: empId,
+      managerId: mgrId,
+      period: period,
     ).value;
 
     expect(vr.request().isSuccess, true);
     expect(vr.status, VacationStatus.Requested);
 
-    expect(vr.approve(managerId).isSuccess, true);
+    expect(vr.approve(mgrId).isSuccess, true);
     expect(vr.status, VacationStatus.Approved);
 
     expect(vr.register().isSuccess, true);
